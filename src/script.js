@@ -59,7 +59,7 @@ scene.add(ambientLight);
   let pmrem = new THREE.PMREMGenerator(renderer);
   let envmapTexture = await new RGBELoader()
     .setDataType(THREE.FloatType)
-    .loadAsync("./textures/alps_field_1k.hdr");  // thanks to https://polyhaven.com/hdris !
+    .loadAsync("https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/1k/alps_field_1k.hdr");  // thanks to https://polyhaven.com/hdris !
   let envMap = pmrem.fromEquirectangular(envmapTexture).texture;
 
 
