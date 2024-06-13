@@ -54,7 +54,7 @@ scene.add(ambientLight);
 
 
 (async function () {
-
+  try{
   //HDRI
   let pmrem = new THREE.PMREMGenerator(renderer);
   let envmapTexture = await new RGBELoader()
@@ -209,6 +209,9 @@ scene.add(ambientLight);
     renderer.render(ringsScene, ringsCamera)
     renderer.autoClear = true;
   });
+} catch(err){
+  console.log(err)
+}
 })();
 
 function makeUFO(ufoMesh, trailTexture, envMap, scene) {
@@ -259,6 +262,7 @@ function makeUFO(ufoMesh, trailTexture, envMap, scene) {
     randomAxisRot: Math.random() * Math.PI * 2,
     // randomAxisRot: 0,
   };
+
 }
 
 function nr (){
