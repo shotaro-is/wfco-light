@@ -59,7 +59,7 @@ scene.add(ambientLight);
   let pmrem = new THREE.PMREMGenerator(renderer);
   let envmapTexture = await new RGBELoader()
     .setDataType(THREE.FloatType)
-    .loadAsync("https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/1k/alps_field_1k.hdr");  // thanks to https://polyhaven.com/hdris !
+    .loadAsync("./alps_field_1k.hdr");  // thanks to https://polyhaven.com/hdris !
   let envMap = pmrem.fromEquirectangular(envmapTexture).texture;
 
   console.log('hdri downloaded')
@@ -120,16 +120,16 @@ scene.add(ambientLight);
 
   // Texture
   let textures = {
-    bump: await new THREE.TextureLoader().loadAsync('./textures/earthbump.jpg'),
-    map: await new THREE.TextureLoader().loadAsync('./textures/earthmap.jpg'),
-    spec: await new THREE.TextureLoader().loadAsync('./textures/earthspec.jpg'),
-    ufoTrailMask: await new THREE.TextureLoader().loadAsync('./textures/mask.png'),
+    bump: await new THREE.TextureLoader().loadAsync('./earthbump.jpg'),
+    map: await new THREE.TextureLoader().loadAsync('./earthmap.jpg'),
+    spec: await new THREE.TextureLoader().loadAsync('./earthspec.jpg'),
+    ufoTrailMask: await new THREE.TextureLoader().loadAsync('./mask.png'),
   }
 
   console.log('texture added')
 
   // UFO
-  let ufo = ( await new GLTFLoader().loadAsync('./models/element_1.glb')).scene.children[0];
+  let ufo = ( await new GLTFLoader().loadAsync('./element_1.glb')).scene.children[0];
 
   console.log('ufo added')
 
@@ -213,9 +213,9 @@ scene.add(ambientLight);
     controls.update();
     renderer.render(scene, camera);
 
-    // renderer.autoClear = false;
-    // renderer.render(ringsScene, ringsCamera)
-    // renderer.autoClear = true;
+    renderer.autoClear = false;
+    renderer.render(ringsScene, ringsCamera)
+    renderer.autoClear = true;
   });
 } catch(err){
   console.log(err)
