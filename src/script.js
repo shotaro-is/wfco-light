@@ -62,6 +62,7 @@ scene.add(ambientLight);
     .loadAsync("https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/1k/alps_field_1k.hdr");  // thanks to https://polyhaven.com/hdris !
   let envMap = pmrem.fromEquirectangular(envmapTexture).texture;
 
+  console.log('hdri downloaded')
 
   // Rings
   const ring1 = new THREE.Mesh(
@@ -114,6 +115,8 @@ scene.add(ambientLight);
   // ring3.moonOpacity = 0.03;
   ringsScene.add(ring3);
 
+  console.log('ring added')
+
 
   // Texture
   let textures = {
@@ -123,8 +126,13 @@ scene.add(ambientLight);
     ufoTrailMask: await new THREE.TextureLoader().loadAsync('./textures/mask.png'),
   }
 
+  console.log('texture added')
+
   // UFO
   let ufo = ( await new GLTFLoader().loadAsync('./models/element_1.glb')).scene.children[0];
+
+  console.log('ufo added')
+
 
   // let ufoMaterial = new THREE.MeshStandardMaterial({color: 0x514a1d})
   let ufoMaterial = new THREE.MeshPhysicalMaterial({
@@ -205,9 +213,9 @@ scene.add(ambientLight);
     controls.update();
     renderer.render(scene, camera);
 
-    renderer.autoClear = false;
-    renderer.render(ringsScene, ringsCamera)
-    renderer.autoClear = true;
+    // renderer.autoClear = false;
+    // renderer.render(ringsScene, ringsCamera)
+    // renderer.autoClear = true;
   });
 } catch(err){
   console.log(err)
