@@ -33,7 +33,7 @@ controls.enableDamping = true;
 
 
 // Light 
-const sunLight = new THREE.DirectionalLight(0xffffff, 3.5);
+const sunLight = new THREE.DirectionalLight(0xffffff, 0.5);
 sunLight.position.set(10, 20, 10);
 sunLight.castShadow = true;
 sunLight.shadow.mapSize.width = 512;
@@ -46,8 +46,8 @@ sunLight.shadow.camera.top = 10;
 sunLight.shadow.camera.right = 10;
 scene.add(sunLight);
 
-const ambientLight = new THREE.AmbientLight(0xffffff, 1.5);
-scene.add(ambientLight);
+// const ambientLight = new THREE.AmbientLight(0xffffff, 1.5);
+// scene.add(ambientLight);
 
 
 
@@ -55,168 +55,221 @@ scene.add(ambientLight);
 
 (async function () {
   try{
-  //HDRI
-  let pmrem = new THREE.PMREMGenerator(renderer);
-  let envmapTexture = await new RGBELoader()
-    .setDataType(THREE.FloatType)
-    .loadAsync("./alps_field_1k.hdr");  // thanks to https://polyhaven.com/hdris !
-  let envMap = pmrem.fromEquirectangular(envmapTexture).texture;
+    //HDRI
+    let pmrem = new THREE.PMREMGenerator(renderer);
+    let envmapTexture = await new RGBELoader()
+      .setDataType(THREE.FloatType)
+      .loadAsync("./alps_field_1k.hdr");  // thanks to https://polyhaven.com/hdris !
+    let envMap = pmrem.fromEquirectangular(envmapTexture).texture;
 
-  console.log('hdri downloaded')
+    console.log('hdri downloaded')
 
-  // Rings
-  const ring1 = new THREE.Mesh(
-    new THREE.RingGeometry(15, 13.5, 80, 1, 0),
-    new THREE.MeshPhysicalMaterial({
-      color: new THREE.Color("#d2ff70").convertSRGBToLinear().multiplyScalar(200),
-      roughness: 0.25,
+    // Rings
+    const ring1 = new THREE.Mesh(
+      new THREE.RingGeometry(15.25, 14.25, 80, 1, 0),
+      // new THREE.SphereGeometry(15, 70, 70),
+      // new THREE.TorusGeometry(15,0.2, 3, 108),
+      new THREE.MeshPhysicalMaterial({
+        // color: new THREE.Color("#d2ff70").convertSRGBToLinear(),
+        color: new THREE.Color("#d2ff70").convertSRGBToLinear().multiplyScalar(200),
+        // roughness: 0.5,
+        envMap,
+        envMapIntensity: 10,
+        side: THREE.DoubleSide,
+        transparent: true,
+        transmission: 0.9,
+        thickness: 0.9,
+        opacity: 0.8,
+      })
+    );
+    // ring1.name = "ring";
+    // ring1.sunOpacity = 0.35;
+    // ring1.moonOpacity = 0.03;
+    ring1.position.set(-2, 0, 0);
+
+    ringsScene.add(ring1);
+    // ring1.rotation.x = Math.PI * 1/2
+    // ring1.rotation.z = Math.PI * 1/3
+    // scene.add(ring1)
+
+    const ring2 = new THREE.Mesh(
+      new THREE.RingGeometry(16.5, 16, 80, 1, 0), 
+      // new THREE.TorusGeometry(16.5,0.2, 3, 108),
+      new THREE.MeshBasicMaterial({
+        // color: new THREE.Color("#d2ff70").convertSRGBToLinear(),
+        color: new THREE.Color("#d2ff70").convertSRGBToLinear().multiplyScalar(10),
+        transparent: true,
+        // envMap,
+        // envMapIntensity: 10,
+        side: THREE.DoubleSide,
+        transmission: 0.9,
+        thickness: 0.9,
+        opacity: 0.8,
+      })
+    );
+    ring2.name = "ring";
+    ring2.position.set(-3, 0, 0);
+
+    // ring2.sunOpacity = 0.35;
+    // ring2.moonOpacity = 0.1;
+    ringsScene.add(ring2);
+    // ring2.rotation.y = Math.PI * 1/3
+    // scene.add(ring2)
+
+    const ring3 = new THREE.Mesh(
+      new THREE.RingGeometry(19, 18.75, 80),
+      // new THREE.TorusGeometry(20,0.2, 3, 108),
+      new THREE.MeshBasicMaterial({
+        color: new THREE.Color("#d2ff70").convertSRGBToLinear().multiplyScalar(200),
+        transparent: true,
+        opacity: 0.5,
+        side: THREE.DoubleSide,
+      })
+    );
+    ring3.position.set(5, 0, 0);
+    ring3.name = "ring";
+    // ring3.sunOpacity = 0.35;
+    // ring3.moonOpacity = 0.03;
+    ringsScene.add(ring3);
+    
+    // scene.add(ring3)
+    console.log('ring added')
+
+
+    // Texture
+    let textures = {
+      bump: await new THREE.TextureLoader().loadAsync('./earthbump.jpg'),
+      map: await new THREE.TextureLoader().loadAsync('./earthmap.jpg'),
+      spec: await new THREE.TextureLoader().loadAsync('./earthspec.jpg'),
+      cloud: await new THREE.TextureLoader().loadAsync('./cloud.png'),
+      ufoTrailMask: await new THREE.TextureLoader().loadAsync('./mask.png'),
+    }
+
+    console.log('texture added')
+
+    // UFO
+    let ufo = ( await new GLTFLoader().loadAsync('./element_1.glb')).scene.children[0];
+
+    console.log('ufo added')
+
+
+    // let ufoMaterial = new THREE.MeshStandardMaterial({color: 0x514a1d})
+    let ufoMaterial = new THREE.MeshPhysicalMaterial({
+      // envMap: this.hoge,
+      roughness: 0,
+      metalness: 0,
+      // color: new THREE.Color("#d2ff70").convertSRGBToLinear(),j
       envMap,
-      envMapIntensity: 1.8,
-      side: THREE.DoubleSide,
-      transparent: true,
-      opacity: 0.35,
-    })
-  );
-  // ring1.name = "ring";
-  // ring1.sunOpacity = 0.35;
-  // ring1.moonOpacity = 0.03;
-  // ring1.position.set(-3, 0, 0);
-
-  ringsScene.add(ring1);
-
-  const ring2 = new THREE.Mesh(
-    new THREE.RingGeometry(16.5, 15.75, 80, 1, 0), 
-    new THREE.MeshBasicMaterial({
-      color: new THREE.Color("#d2ff70").convertSRGBToLinear(),
-      transparent: true,
-      opacity: 0.5,
-      side: THREE.DoubleSide,
-    })
-  );
-  ring2.name = "ring";
-  ring2.position.set(2, 0, 0);
-
-  // ring2.sunOpacity = 0.35;
-  // ring2.moonOpacity = 0.1;
-  ringsScene.add(ring2);
-
-  const ring3 = new THREE.Mesh(
-    new THREE.RingGeometry(18, 17.75, 80),
-    new THREE.MeshBasicMaterial({
-      color: new THREE.Color("#d2ff70").convertSRGBToLinear().multiplyScalar(50),
-      transparent: true,
-      opacity: 0.5,
-      side: THREE.DoubleSide,
-    })
-  );
-  ring3.position.set(3, 0, 0);
-  ring3.name = "ring";
-  // ring3.sunOpacity = 0.35;
-  // ring3.moonOpacity = 0.03;
-  ringsScene.add(ring3);
-
-  console.log('ring added')
-
-
-  // Texture
-  let textures = {
-    bump: await new THREE.TextureLoader().loadAsync('./earthbump.jpg'),
-    map: await new THREE.TextureLoader().loadAsync('./earthmap.jpg'),
-    spec: await new THREE.TextureLoader().loadAsync('./earthspec.jpg'),
-    ufoTrailMask: await new THREE.TextureLoader().loadAsync('./mask.png'),
-  }
-
-  console.log('texture added')
-
-  // UFO
-  let ufo = ( await new GLTFLoader().loadAsync('./element_1.glb')).scene.children[0];
-
-  console.log('ufo added')
-
-
-  // let ufoMaterial = new THREE.MeshStandardMaterial({color: 0x514a1d})
-  let ufoMaterial = new THREE.MeshPhysicalMaterial({
-    // envMap: this.hoge,
-    roughness: 0.5,
-    metalness: 0,
-    // color: 0xFFEA00,
-    transmission: 1,
-    refractionRatio: 0.98,
-    ior: 2.33
-    // color: "green"
-  });
-
-
-  ufo.traverse((o) => {
-    if (o.isMesh) o.material = ufoMaterial;
-  })
-
-  let ufosData = [
-    makeUFO(ufo, textures.ufoTrailMask, envMap, scene),
-    makeUFO(ufo, textures.ufoTrailMask, envMap, scene),
-    makeUFO(ufo, textures.ufoTrailMask, envMap, scene),
-    makeUFO(ufo, textures.ufoTrailMask, envMap, scene),
-    makeUFO(ufo, textures.ufoTrailMask, envMap, scene),
-    makeUFO(ufo, textures.ufoTrailMask, envMap, scene),
-    makeUFO(ufo, textures.ufoTrailMask, envMap, scene),
-    makeUFO(ufo, textures.ufoTrailMask, envMap, scene),
-    makeUFO(ufo, textures.ufoTrailMask, envMap, scene),
-    makeUFO(ufo, textures.ufoTrailMask, envMap, scene),
-    makeUFO(ufo, textures.ufoTrailMask, envMap, scene),
-    makeUFO(ufo, textures.ufoTrailMask, envMap, scene),
-  ]
-
-  // Sphere
-  let sphere = new THREE.Mesh(
-    new THREE.SphereGeometry(10, 70, 70),
-    new THREE.MeshPhysicalMaterial({
-      map: textures.map,
-      roughnessMap: textures.spec,
-      bumpMap: textures.bump,
-      bumpScale: 0.05,
-      // envMap,
-      // envMapIntensity: 0.6,
-      // sheen: 0.5,
-      // sheenRoughness: 0.5,
-      // sheenColor: new THREE.Color("#d1ff6f").convertSRGBToLinear(),
-      clearcoat: 1,
-    }),
-  );
-
-  sphere.rotation.y += Math.PI * 1.4;
-  sphere.receiveShadow = true;
-  scene.add(sphere);
-
-  // Animation
-  let clock = new Clock();
-
-  renderer.setAnimationLoop(() => {
-
-    let delta = clock.getDelta();
-
-    ufosData.forEach((ufoData) => {
-      let ufo = ufoData.group;
-
-      ufo.position.set(0, 0, 0);
-      ufo.rotation.set(0, 0, 0);
-      ufo.updateMatrixWorld();
-
-      ufoData.rot += delta * 0.25
-      // ufoData.rot += delta * 0;
-      ufo.rotateOnAxis(ufoData.randomAxis, ufoData.randomAxisRot);
-      ufo.rotateOnAxis(new THREE.Vector3(0, 1, 0), ufoData.rot);
-      ufo.rotateOnAxis(new THREE.Vector3(0, 0, 1), ufoData.rad);
-      ufo.translateY(ufoData.yOff);
-      ufo.rotateOnAxis(new THREE.Vector3(0, 1, 0), ufoData.rot*2);
+      envMapIntensity: 1,
+      transmission: 1,
+      thickness: 1,
+      refractionRatio: 0.98,
+      ior: 2.33
+      // color: "green"
     });
 
-    controls.update();
-    renderer.render(scene, camera);
 
-    renderer.autoClear = false;
-    renderer.render(ringsScene, ringsCamera)
-    renderer.autoClear = true;
-  });
+    ufo.traverse((o) => {
+      if (o.isMesh) o.material = ufoMaterial;
+    })
+
+    let ufosData = [
+      makeUFO(ufo, textures.ufoTrailMask, envMap, scene),
+      makeUFO(ufo, textures.ufoTrailMask, envMap, scene),
+      makeUFO(ufo, textures.ufoTrailMask, envMap, scene),
+      makeUFO(ufo, textures.ufoTrailMask, envMap, scene),
+      makeUFO(ufo, textures.ufoTrailMask, envMap, scene),
+      makeUFO(ufo, textures.ufoTrailMask, envMap, scene),
+      makeUFO(ufo, textures.ufoTrailMask, envMap, scene),
+      makeUFO(ufo, textures.ufoTrailMask, envMap, scene),
+      makeUFO(ufo, textures.ufoTrailMask, envMap, scene),
+      makeUFO(ufo, textures.ufoTrailMask, envMap, scene),
+      makeUFO(ufo, textures.ufoTrailMask, envMap, scene),
+      makeUFO(ufo, textures.ufoTrailMask, envMap, scene),
+      makeUFO(ufo, textures.ufoTrailMask, envMap, scene),
+      makeUFO(ufo, textures.ufoTrailMask, envMap, scene),
+      makeUFO(ufo, textures.ufoTrailMask, envMap, scene),
+      makeUFO(ufo, textures.ufoTrailMask, envMap, scene),
+      makeUFO(ufo, textures.ufoTrailMask, envMap, scene),
+
+    ]
+
+    // Earth
+    let earth = new THREE.Mesh(
+      new THREE.SphereGeometry(10, 70, 70),
+      new THREE.MeshPhysicalMaterial({
+        map: textures.map,
+        roughnessMap: textures.spec,
+        bumpMap: textures.bump,
+        bumpScale: 0.05,
+        envMap,
+        envMapIntensity: 0.8,
+        sheen: 0.5,
+        sheenRoughness: 0.5,
+        sheenColor: new THREE.Color("#292f13").convertSRGBToLinear(),
+        clearcoat: 1,
+      }),
+    );
+
+    earth.rotation.y += Math.PI * 1.4;
+    earth.receiveShadow = true;
+    scene.add(earth);
+
+    //Cloud
+    let cloud = new THREE.Mesh(
+      new THREE.SphereGeometry(10.3, 70, 70),
+      new THREE.MeshPhysicalMaterial({
+          map: textures.cloud,
+          envMap,
+          envMapIntensity: 0.6,
+          transparent: true,
+          opacity: 0.8,
+          blending: THREE.AdditiveBlending,
+          depthWrite: false // Often helpful with transparency issues
+      })
+    )
+    scene.add(cloud)
+
+    // Animation
+    let clock = new Clock();
+
+    renderer.setAnimationLoop(() => {
+
+      let delta = clock.getDelta();
+
+      // Earth Animation
+      earth.rotation.y += delta * 0.03;
+
+      // Cloud Animation
+      cloud.rotation.y -= delta * 0.015;
+
+      // Ring1 animation
+      // ring1.rotation.y += delta * 0.2
+
+      // UFO Animation
+      ufosData.forEach((ufoData) => {
+        let ufo = ufoData.group;
+
+        ufo.position.set(0, 0, 0);
+        ufo.rotation.set(0, 0, 0);
+        ufo.updateMatrixWorld();
+
+        ufoData.rot += delta * 0.25
+        // ufoData.rot += delta * 0;
+        ufo.rotateOnAxis(ufoData.randomAxis, ufoData.randomAxisRot);
+        ufo.rotateOnAxis(new THREE.Vector3(0, 1, 0), ufoData.rot);
+        ufo.rotateOnAxis(new THREE.Vector3(0, 0, 1), ufoData.rad);
+        ufo.translateY(ufoData.yOff);
+        ufo.rotateOnAxis(new THREE.Vector3(0, 1, 0), ufoData.rot*2);
+      });
+
+      controls.update();
+      renderer.render(scene, camera);
+
+      renderer.autoClear = false;
+      renderer.render(ringsScene, ringsCamera)
+      renderer.autoClear = true;
+    });
 } catch(err){
   console.log(err)
 }
@@ -224,7 +277,7 @@ scene.add(ambientLight);
 
 function makeUFO(ufoMesh, trailTexture, envMap, scene) {
   let ufo = ufoMesh.clone();
-  ufo.scale.set(4, 4, 4);
+  ufo.scale.set(3, 10, 3);
   ufo.position.set(0,0,0);
   ufo.rotation.set(0,0,0);
   ufo.updateMatrixWorld();
