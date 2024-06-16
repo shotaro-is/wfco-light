@@ -59,17 +59,17 @@ scene.add(sunLight);
     let pmrem = new THREE.PMREMGenerator(renderer);
     let envmapTexture = await new RGBELoader()
       .setDataType(THREE.FloatType)
-      .loadAsync("./alps_field_1k.hdr");  // thanks to https://polyhaven.com/hdris !
+      .loadAsync("https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/1k/cannon_1k.hdr");  // thanks to https://polyhaven.com/hdris !
     let envMap = pmrem.fromEquirectangular(envmapTexture).texture;
 
     console.log('hdri downloaded')
 
     // Rings
     const ring1 = new THREE.Mesh(
-      new THREE.RingGeometry(15.25, 14.25, 80, 1, 0),
+      new THREE.RingGeometry(13.25, 13, 80, 1, 0),
       // new THREE.SphereGeometry(15, 70, 70),
       // new THREE.TorusGeometry(15,0.2, 3, 108),
-      new THREE.MeshPhysicalMaterial({
+      new THREE.MeshStandardMaterial({
         // color: new THREE.Color("#d2ff70").convertSRGBToLinear(),
         color: new THREE.Color("#d2ff70").convertSRGBToLinear().multiplyScalar(200),
         // roughness: 0.5,
@@ -108,7 +108,7 @@ scene.add(sunLight);
       })
     );
     ring2.name = "ring";
-    ring2.position.set(-3, 0, 0);
+    ring2.position.set(-5, 0, 0);
 
     // ring2.sunOpacity = 0.35;
     // ring2.moonOpacity = 0.1;
@@ -156,13 +156,13 @@ scene.add(sunLight);
     // let ufoMaterial = new THREE.MeshStandardMaterial({color: 0x514a1d})
     let ufoMaterial = new THREE.MeshPhysicalMaterial({
       // envMap: this.hoge,
-      roughness: 0,
+      roughness: 0.7,
       metalness: 0,
-      // color: new THREE.Color("#d2ff70").convertSRGBToLinear(),j
+      // color: new THREE.Color("#c1c1c1").convertSRGBToLinear(),
       envMap,
       envMapIntensity: 1,
       transmission: 1,
-      thickness: 1,
+      thickness: 0.5,
       refractionRatio: 0.98,
       ior: 2.33
       // color: "green"
@@ -174,6 +174,12 @@ scene.add(sunLight);
     })
 
     let ufosData = [
+      makeUFO(ufo, textures.ufoTrailMask, envMap, scene),
+      makeUFO(ufo, textures.ufoTrailMask, envMap, scene),
+      makeUFO(ufo, textures.ufoTrailMask, envMap, scene),
+      makeUFO(ufo, textures.ufoTrailMask, envMap, scene),
+      makeUFO(ufo, textures.ufoTrailMask, envMap, scene),
+      makeUFO(ufo, textures.ufoTrailMask, envMap, scene),
       makeUFO(ufo, textures.ufoTrailMask, envMap, scene),
       makeUFO(ufo, textures.ufoTrailMask, envMap, scene),
       makeUFO(ufo, textures.ufoTrailMask, envMap, scene),
@@ -277,7 +283,7 @@ scene.add(sunLight);
 
 function makeUFO(ufoMesh, trailTexture, envMap, scene) {
   let ufo = ufoMesh.clone();
-  ufo.scale.set(3, 10, 3);
+  ufo.scale.set(4, 20, 4);
   ufo.position.set(0,0,0);
   ufo.rotation.set(0,0,0);
   ufo.updateMatrixWorld();
@@ -329,114 +335,3 @@ function makeUFO(ufoMesh, trailTexture, envMap, scene) {
 function nr (){
   return Math.random() * 2 - 1;
 }
-
-
-
-// export default class Sketch {
-//   constructor(options) {
-//     this.scene = new THREE.Scene();
-
-//     this.container = options.dom;
-//     this.width = this.container.offsetWidth;
-//     this.height = this.container.offsetHeight;
-//     this.renderer = new THREE.WebGLRenderer();
-//     this.renderer.setPixelRatio(window.devicePixelRatio);
-//     this.renderer.setSize(this.width, this.height);
-//     this.renderer.setClearColor(0xeeeeee, 1); 
-//     // this.renderer.outputEncoding = THREE.sRGBEncoding;
-
-//     this.container.appendChild(this.renderer.domElement);
-
-//     this.camera = new THREE.PerspectiveCamera(
-//       70,
-//       window.innerWidth / window.innerHeight,
-//       0.001,
-//       1000
-//     );
-
-//     // var frustumSize = 10;
-//     // var aspect = window.innerWidth / window.innerHeight;
-//     // this.camera = new THREE.OrthographicCamera( frustumSize * aspect / - 2, frustumSize * aspect / 2, frustumSize / 2, frustumSize / - 2, -1000, 1000 );
-//     this.camera.position.set(0, 0, 2);
-//     this.controls = new OrbitControls(this.camera, this.renderer.domElement);
-//     this.time = 0;
-
-//     this.isPlaying = true;
-    
-//     this.addObjects();
-//     this.resize();
-//     this.render();
-//     this.setupResize();
-//     // this.settings();
-//   }
-
-//   settings() {
-//     let that = this;
-//     this.settings = {
-//       progress: 0,
-//     };
-//     this.gui = new GUI();
-//     this.gui.add(this.settings, "progress", 0, 1, 0.01);
-//   }
-
-//   setupResize() {
-//     window.addEventListener("resize", this.resize.bind(this));
-//   }
-
-//   resize() {
-//     this.width = this.container.offsetWidth;
-//     this.height = this.container.offsetHeight;
-//     this.renderer.setSize(this.width, this.height);
-//     this.camera.aspect = this.width / this.height;
-//     this.camera.updateProjectionMatrix();
-//   }
-
-//   addObjects() {
-//     let that = this;
-//     this.material = new THREE.ShaderMaterial({
-//       extensions: {
-//         derivatives: "#extension GL_OES_standard_derivatives : enable"
-//       },
-//       side: THREE.DoubleSide,
-//       uniforms: {
-//         time: { type: "f", value: 0 },
-//         resolution: { type: "v4", value: new THREE.Vector4() },
-//         uvRate1: {
-//           value: new THREE.Vector2(1, 1)
-//         }
-//       },
-//       // wireframe: true,
-//       // transparent: true,
-//       vertexShader: vertex,
-//       fragmentShader: fragment
-//     });
-
-//     this.geometry = new THREE.PlaneGeometry(1, 1, 1, 1);
-
-//     this.plane = new THREE.Mesh(this.geometry, this.material);
-//     this.scene.add(this.plane);
-//   }
-
-//   stop() {
-//     this.isPlaying = false;
-//   }
-
-//   play() {
-//     if(!this.isPlaying){
-//       this.render()
-//       this.isPlaying = true;
-//     }
-//   }
-
-//   render() {
-//     if (!this.isPlaying) return;
-//     this.time += 0.05;
-//     this.material.uniforms.time.value = this.time;
-//     requestAnimationFrame(this.render.bind(this));
-//     this.renderer.render(this.scene, this.camera);
-//   }
-// }
-
-// new Sketch({
-//   dom: document.getElementById('webgl')
-// });
