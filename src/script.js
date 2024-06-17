@@ -226,29 +226,45 @@ scene.add(sunLight);
     })
 
     let ufosData = [
-      makeUFO(ufo, textures.ufoTrailMask, envMap, scene),
-      makeUFO(ufo, textures.ufoTrailMask, envMap, scene),
-      makeUFO(ufo, textures.ufoTrailMask, envMap, scene),
-      makeUFO(ufo, textures.ufoTrailMask, envMap, scene),
-      makeUFO(ufo, textures.ufoTrailMask, envMap, scene),
-      makeUFO(ufo, textures.ufoTrailMask, envMap, scene),
-      makeUFO(ufo, textures.ufoTrailMask, envMap, scene),
-      makeUFO(ufo, textures.ufoTrailMask, envMap, scene),
-      makeUFO(ufo, textures.ufoTrailMask, envMap, scene),
-      makeUFO(ufo, textures.ufoTrailMask, envMap, scene),
-      makeUFO(ufo, textures.ufoTrailMask, envMap, scene),
-      makeUFO(ufo, textures.ufoTrailMask, envMap, scene),
-      makeUFO(ufo, textures.ufoTrailMask, envMap, scene),
-      makeUFO(ufo, textures.ufoTrailMask, envMap, scene),
-      makeUFO(ufo, textures.ufoTrailMask, envMap, scene),
-      makeUFO(ufo, textures.ufoTrailMask, envMap, scene),
-      makeUFO(ufo, textures.ufoTrailMask, envMap, scene),
-      makeUFO(ufo, textures.ufoTrailMask, envMap, scene),
-      makeUFO(ufo, textures.ufoTrailMask, envMap, scene),
-      makeUFO(ufo, textures.ufoTrailMask, envMap, scene),
-      makeUFO(ufo, textures.ufoTrailMask, envMap, scene),
-      makeUFO(ufo, textures.ufoTrailMask, envMap, scene),
-      makeUFO(ufo, textures.ufoTrailMask, envMap, scene),
+      makeUFO(ufo, textures.ufoTrailMask, envMap, scene, Math.PI / 2 + 0.05, Math.PI / 10), // South America
+      makeUFO(ufo, textures.ufoTrailMask, envMap, scene, Math.PI / 2 + 0.05, Math.PI / 10 + 0.2), // South America
+      makeUFO(ufo, textures.ufoTrailMask, envMap, scene, Math.PI * 0.7, Math.PI / 10 - 0.1), // South America
+      makeUFO(ufo, textures.ufoTrailMask, envMap, scene, Math.PI / 3 + 0.05, -Math.PI / 5 - 0.1), // North America
+      makeUFO(ufo, textures.ufoTrailMask, envMap, scene, Math.PI / 3, -Math.PI / 6), // North America
+      makeUFO(ufo, textures.ufoTrailMask, envMap, scene, Math.PI / 4 + 0.1, -Math.PI / 10), // North America
+      makeUFO(ufo, textures.ufoTrailMask, envMap, scene, Math.PI / 8 + 0.05, Math.PI / 4 + 0.05), // Iceland
+      makeUFO(ufo, textures.ufoTrailMask, envMap, scene, Math.PI / 4 + 0.1, Math.PI / 3  + 0.1), // Spain 1,
+      makeUFO(ufo, textures.ufoTrailMask, envMap, scene, Math.PI / 4 + 0.03, Math.PI / 3  + 0.2), // Spain 2
+      makeUFO(ufo, textures.ufoTrailMask, envMap, scene, Math.PI / 4 + 0.05, Math.PI / 2 ), // Croatia
+      makeUFO(ufo, textures.ufoTrailMask, envMap, scene, Math.PI / 4 - 0.05, Math.PI / 2 + 0.2 ), // Ukraine
+      makeUFO(ufo, textures.ufoTrailMask, envMap, scene, Math.PI / 4 + 0.05, Math.PI / 2 + 0.15 ), // Turkey1
+      makeUFO(ufo, textures.ufoTrailMask, envMap, scene, Math.PI / 4 + 0.1, Math.PI / 2 + 0.25 ), // Turkey2
+      makeUFO(ufo, textures.ufoTrailMask, envMap, scene, Math.PI / 4 + 0.25, Math.PI / 2 + 0.25 ), // Israel
+      makeUFO(ufo, textures.ufoTrailMask, envMap, scene, Math.PI / 3 + 0.2, Math.PI / 2 + 0.42 ), // Saudi Arabia 1
+      makeUFO(ufo, textures.ufoTrailMask, envMap, scene, Math.PI / 3 + 0.1, Math.PI / 2 + 0.55 ), // Saudi Arabia 2
+      makeUFO(ufo, textures.ufoTrailMask, envMap, scene, Math.PI / 2 - 0.3, Math.PI / 3 ), // Snegal
+      makeUFO(ufo, textures.ufoTrailMask, envMap, scene, Math.PI / 2 - 0.15, Math.PI / 3 + 0.35 ), // Nigeria
+      makeUFO(ufo, textures.ufoTrailMask, envMap, scene, Math.PI * 2 / 3 - 0.1 , Math.PI / 2 + 0.05 ), // South Africa
+      makeUFO(ufo, textures.ufoTrailMask, envMap, scene, Math.PI * 2 / 3 - 0.2 , Math.PI / 2 + 0.15 ), // Botswana
+      makeUFO(ufo, textures.ufoTrailMask, envMap, scene, Math.PI  / 3 , Math.PI *  3 / 4 + 0.2 ), // India 1
+      makeUFO(ufo, textures.ufoTrailMask, envMap, scene, Math.PI  / 3  + 0.1, Math.PI *  3 / 4 + 0.3 ), // India 2
+      makeUFO(ufo, textures.ufoTrailMask, envMap, scene, Math.PI  / 3  + 0.3, Math.PI *  9 / 10 + 0.3 ), // Vietnam
+      makeUFO(ufo, textures.ufoTrailMask, envMap, scene, Math.PI  / 4 + 0.1, Math.PI *  9 / 10 + 0.5 ), // China
+      // makeUFO(ufo, textures.ufoTrailMask, envMap, scene),
+      // makeUFO(ufo, textures.ufoTrailMask, envMap, scene),
+      // makeUFO(ufo, textures.ufoTrailMask, envMap, scene),
+      // makeUFO(ufo, textures.ufoTrailMask, envMap, scene),
+      // makeUFO(ufo, textures.ufoTrailMask, envMap, scene),
+      // makeUFO(ufo, textures.ufoTrailMask, envMap, scene),
+      // makeUFO(ufo, textures.ufoTrailMask, envMap, scene),
+      // makeUFO(ufo, textures.ufoTrailMask, envMap, scene),
+      // makeUFO(ufo, textures.ufoTrailMask, envMap, scene),
+      // makeUFO(ufo, textures.ufoTrailMask, envMap, scene),
+      // makeUFO(ufo, textures.ufoTrailMask, envMap, scene),
+      // makeUFO(ufo, textures.ufoTrailMask, envMap, scene),
+      // makeUFO(ufo, textures.ufoTrailMask, envMap, scene),
+      // makeUFO(ufo, textures.ufoTrailMask, envMap, scene),
+      // makeUFO(ufo, textures.ufoTrailMask, envMap, scene),
 
     ]
 
@@ -315,14 +331,11 @@ scene.add(sunLight);
         ufo.rotation.set(0, 0, 0);
         ufo.updateMatrixWorld();
 
-        // ufoData.rot += delta * 0.25
-        ufoData.rot += delta * 0.03;
-        ufo.rotateOnAxis(ufoData.randomAxis, ufoData.randomAxisRot); // random distribution
-        ufo.rotateOnAxis(new THREE.Vector3(0, 1, 0), -20*ufoData.rot); // ufo rotation
-        ufo.rotateOnWorldAxis(new THREE.Vector3(0,1,0), ufoData.rot);
-        // ufo.rotateOnAxis(new THREE.Vector3(0, 0, 1), ufoData.rad);
+        ufoData.longRot += delta * 0.03;
+        ufo.rotateOnAxis(new THREE.Vector3(0, 0, 1), ufoData.latiRot); // Latitude Rotation
+        ufo.rotateOnWorldAxis(new THREE.Vector3(0, 1, 0), ufoData.longRot); // Longtitude Rotation
+        ufo.rotateOnAxis(new THREE.Vector3(0, 1, 0), -20*ufoData.longRot); // ufo rotation
         ufo.translateY(ufoData.yOff);
-        // ufo.rotateOnAxis(new THREE.Vector3(0, 1, 0), ufoData.rot*20);
       });
 
       controls.update();
@@ -337,9 +350,9 @@ scene.add(sunLight);
 }
 })();
 
-function makeUFO(ufoMesh, trailTexture, envMap, scene) {
+function makeUFO(ufoMesh, trailTexture, envMap, scene, lati, long) {
   let ufo = ufoMesh.clone();
-  ufo.scale.set(3, 5, 3);
+  ufo.scale.set(3, 2, 3);
   ufo.position.set(0,0,0);
   ufo.rotation.set(0,0,0);
   ufo.updateMatrixWorld();
@@ -378,12 +391,16 @@ function makeUFO(ufoMesh, trailTexture, envMap, scene) {
 
   return {
     group,
-    rot: Math.random() * Math.PI * 2.0,
+    rot: 0,
     rad: Math.random() * Math.PI * 0.45 + 0.5,
-    // yOff: 10.5 + Math.random() * 1.0,
-    yOff: 10.5,
-    randomAxis: new THREE.Vector3 (nr(), nr(), nr()).normalize(),
-    randomAxisRot: Math.random() * Math.PI * 2,
+    yOff: 10.5 + Math.random() * 1,
+    // yOff: 10.5,
+    // latitudeAxis: new THREE.Vector3(0,0,1), // Latitude Z
+    latiRot: lati,
+    longRot: long,
+    // rotSpeed : Math.random() + 0.5 
+    // randomAxis: new THREE.Vector3 (nr(), nr(), nr()).normalize(),
+    // randomAxisRot: Math.random() * Math.PI * 2,
     // randomAxisRot: 0,
   };
 
