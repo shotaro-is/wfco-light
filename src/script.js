@@ -1,9 +1,11 @@
 import * as THREE from  "https://cdn.skypack.dev/three@0.137";
 import { RGBELoader } from "https://cdn.skypack.dev/three-stdlib@2.8.5/loaders/RGBELoader";
 import { GLTFLoader } from "https://cdn.skypack.dev/three-stdlib@2.8.5/loaders/GLTFLoader";
+import { DRACOLoader } from "https://cdn.skypack.dev/three-stdlib@2.8.5/loaders/DRACOLoader";
 import { OrbitControls } from "https://cdn.skypack.dev/three-stdlib@2.8.5/controls/OrbitControls";
 import GUI from 'lil-gui'
 import { Clock, PerspectiveCamera } from "three";
+import { roughness } from "three/examples/jsm/nodes/Nodes.js";
 
 const scene = new THREE.Scene();
 
@@ -18,7 +20,7 @@ ringsCamera.position.set(0, 0, 50);
 // Renderer
 const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
 renderer.setSize(innerWidth, innerHeight);
-renderer.toneMapping = THREE.ACESFilmicToneMapping;
+// renderer.toneMapping = THREE.ACESFilmicToneMapping;
 renderer.outputEncoding = THREE.sRGBEncoding;
 renderer.physicallyCorrectLights = true;
 renderer.shadowMap.enabled = true;
@@ -126,7 +128,7 @@ scene.add(sunLight);
         side: THREE.DoubleSide,
       })
     );
-    ring3.position.set(5, 0, 0);
+    ring3.position.set(-7.5, 0, 0);
     ring3.name = "ring";
     // ring3.sunOpacity = 0.35;
     // ring3.moonOpacity = 0.03;
@@ -138,14 +140,61 @@ scene.add(sunLight);
 
     // Texture
     let textures = {
-      bump: await new THREE.TextureLoader().loadAsync('./earthbump.jpg'),
+      bump: await new THREE.TextureLoader().loadAsync('./earthbump_2.jpg'),
       map: await new THREE.TextureLoader().loadAsync('./earthmap.jpg'),
-      spec: await new THREE.TextureLoader().loadAsync('./earthspec.jpg'),
+      spec: await new THREE.TextureLoader().loadAsync('./earthspec_2.jpg'),
       cloud: await new THREE.TextureLoader().loadAsync('./cloud.png'),
       ufoTrailMask: await new THREE.TextureLoader().loadAsync('./mask.png'),
     }
 
     console.log('texture added')
+
+    
+    // Continent
+    const dLoader = ( await new DRACOLoader().setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.5.7/').setDecoderConfig({type: 'js'}));
+    let continent = ( await new GLTFLoader().setDRACOLoader(dLoader).loadAsync('./continent_highpoly_4.glb')).scene.children[0];
+    console.log(continent)
+
+    textures.bump.flipY = false;
+    textures.spec.flipy = false;
+
+    let continentMaterial = new THREE.MeshPhysicalMaterial({
+      roughnessMap: textures.spec,
+      bumpMap: textures.bump,
+      roughnessScale: 10,
+      bumpScale: 0.01,
+      metalness: 0,
+      // color: new THREE.Color("#c1c1c1").convertSRGBToLinear(),
+      envMap,
+      envMapIntensity: 3,
+      transmission: 1,
+      thickness: 0.01,
+    });
+
+    continent.traverse((o) => {
+      if (o.isMesh) o.material = continentMaterial;
+    })
+
+    const continentScale = 20
+    continent.scale.set(continentScale , continentScale, continentScale);
+    continent.rotation.y -= Math.PI * 1.389;
+    continent.rotation.x -= Math.PI * 0.01;
+
+
+
+    scene.add(continent)
+    // this.gltfLoader.setDRACOLoader(this.dLoader);
+    // this.gltfLoader.load('./l_highpoly.glb', (glb) => {
+    //   glb.scene.scale.set(0.2, 0.2, 0.2);
+    //   this.earthmesh = glb.scene;
+    //   glb.scene.traverse( o => {
+    //     // o.geometry.center()
+    //     // o.scale.set(0.25, 0.25, 0.25)
+    //     // o.position.set(0, -0.5, 0)
+    //     o.material = this.landMaterial
+    //   })
+    //   this.scene.add(this.earthmesh);
+    // });
 
     // UFO
     let ufo = ( await new GLTFLoader().loadAsync('./element_1.glb')).scene.children[0];
@@ -153,20 +202,23 @@ scene.add(sunLight);
     console.log('ufo added')
 
 
-    // let ufoMaterial = new THREE.MeshStandardMaterial({color: 0x514a1d})
-    let ufoMaterial = new THREE.MeshPhysicalMaterial({
-      // envMap: this.hoge,
-      roughness: 0.7,
-      metalness: 0,
-      // color: new THREE.Color("#c1c1c1").convertSRGBToLinear(),
-      envMap,
-      envMapIntensity: 1,
-      transmission: 1,
-      thickness: 0.5,
-      refractionRatio: 0.98,
-      ior: 2.33
-      // color: "green"
-    });
+    let ufoMaterial = new THREE.MeshBasicMaterial()
+    ufoMaterial.color.setHex( 0xdcfd7c )
+    ufoMaterial.reflectivity = 0.5;
+    // ufoMaterial.emissive = new THREE.Color("#dcfd7c").convertSRGBToLinear().multiplyScalar(1)
+    // let ufoMaterial = new THREE.MeshPhysicalMaterial({
+    //   // envMap: this.hoge,
+    //   roughness: 0.7,
+    //   metalness: 0,
+    //   // color: new THREE.Color("#c1c1c1").convertSRGBToLinear(),
+    //   envMap,
+    //   envMapIntensity: 1,
+    //   transmission: 1,
+    //   thickness: 0.5,
+    //   refractionRatio: 0.98,
+    //   ior: 2.33
+    //   // color: "green"
+    // });
 
 
     ufo.traverse((o) => {
@@ -204,15 +256,16 @@ scene.add(sunLight);
     let earth = new THREE.Mesh(
       new THREE.SphereGeometry(10, 70, 70),
       new THREE.MeshPhysicalMaterial({
-        map: textures.map,
-        roughnessMap: textures.spec,
-        bumpMap: textures.bump,
-        bumpScale: 0.05,
+        // map: textures.map,
+        // roughnessMap: textures.spec,
+        // bumpMap: textures.bump,
+        // bumpScale: 0.05,
+        color: new THREE.Color("#006B6D").convertSRGBToLinear(),
         envMap,
         envMapIntensity: 0.8,
         sheen: 0.5,
         sheenRoughness: 0.5,
-        sheenColor: new THREE.Color("#292f13").convertSRGBToLinear(),
+        sheenColor: new THREE.Color("#183144").convertSRGBToLinear(),
         clearcoat: 1,
       }),
     );
@@ -223,7 +276,7 @@ scene.add(sunLight);
 
     //Cloud
     let cloud = new THREE.Mesh(
-      new THREE.SphereGeometry(10.3, 70, 70),
+      new THREE.SphereGeometry(10.2, 70, 70),
       new THREE.MeshPhysicalMaterial({
           map: textures.cloud,
           envMap,
@@ -244,7 +297,9 @@ scene.add(sunLight);
       let delta = clock.getDelta();
 
       // Earth Animation
-      earth.rotation.y += delta * 0.03;
+      earth.rotation.y += delta * 0.05;
+
+      continent.rotation.y += delta * 0.03;
 
       // Cloud Animation
       cloud.rotation.y -= delta * 0.015;
@@ -260,13 +315,14 @@ scene.add(sunLight);
         ufo.rotation.set(0, 0, 0);
         ufo.updateMatrixWorld();
 
-        ufoData.rot += delta * 0.25
-        // ufoData.rot += delta * 0;
-        ufo.rotateOnAxis(ufoData.randomAxis, ufoData.randomAxisRot);
-        ufo.rotateOnAxis(new THREE.Vector3(0, 1, 0), ufoData.rot);
-        ufo.rotateOnAxis(new THREE.Vector3(0, 0, 1), ufoData.rad);
+        // ufoData.rot += delta * 0.25
+        ufoData.rot += delta * 0.03;
+        ufo.rotateOnAxis(ufoData.randomAxis, ufoData.randomAxisRot); // random distribution
+        ufo.rotateOnAxis(new THREE.Vector3(0, 1, 0), -20*ufoData.rot); // ufo rotation
+        ufo.rotateOnWorldAxis(new THREE.Vector3(0,1,0), ufoData.rot);
+        // ufo.rotateOnAxis(new THREE.Vector3(0, 0, 1), ufoData.rad);
         ufo.translateY(ufoData.yOff);
-        ufo.rotateOnAxis(new THREE.Vector3(0, 1, 0), ufoData.rot*2);
+        // ufo.rotateOnAxis(new THREE.Vector3(0, 1, 0), ufoData.rot*20);
       });
 
       controls.update();
@@ -283,7 +339,7 @@ scene.add(sunLight);
 
 function makeUFO(ufoMesh, trailTexture, envMap, scene) {
   let ufo = ufoMesh.clone();
-  ufo.scale.set(4, 20, 4);
+  ufo.scale.set(3, 5, 3);
   ufo.position.set(0,0,0);
   ufo.rotation.set(0,0,0);
   ufo.updateMatrixWorld();
@@ -323,8 +379,9 @@ function makeUFO(ufoMesh, trailTexture, envMap, scene) {
   return {
     group,
     rot: Math.random() * Math.PI * 2.0,
-    rad: Math.random() * Math.PI * 0.45 + 0.2,
-    yOff: 10.5 + Math.random() * 1.0,
+    rad: Math.random() * Math.PI * 0.45 + 0.5,
+    // yOff: 10.5 + Math.random() * 1.0,
+    yOff: 10.5,
     randomAxis: new THREE.Vector3 (nr(), nr(), nr()).normalize(),
     randomAxisRot: Math.random() * Math.PI * 2,
     // randomAxisRot: 0,
