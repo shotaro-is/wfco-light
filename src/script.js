@@ -35,7 +35,7 @@ controls.enableDamping = true;
 
 
 // Light 
-const sunLight = new THREE.DirectionalLight(0xffffff, 0.5);
+const sunLight = new THREE.DirectionalLight(0xffffff, 0);
 sunLight.position.set(10, 20, 10);
 sunLight.castShadow = true;
 sunLight.shadow.mapSize.width = 512;
@@ -159,20 +159,23 @@ scene.add(sunLight);
     textures.spec.flipy = false;
 
     let continentMaterial = new THREE.MeshPhysicalMaterial({
-      roughnessMap: textures.spec,
+      // roughnessMap: textures.spec,
       bumpMap: textures.bump,
-      roughnessScale: 10,
-      bumpScale: 0.01,
+      // roughnessScale: 10,
+      bumpScale: 0.5,
       metalness: 0,
+      roughness: 0.7,
       // color: new THREE.Color("#c1c1c1").convertSRGBToLinear(),
       envMap,
-      envMapIntensity: 3,
+      envMapIntensity: 0.5,
       transmission: 1,
-      thickness: 0.01,
+      thickness: 10,
     });
 
     continent.traverse((o) => {
       if (o.isMesh) o.material = continentMaterial;
+      o.castShadow = false;
+
     })
 
     const continentScale = 20
@@ -204,6 +207,7 @@ scene.add(sunLight);
 
     let ufoMaterial = new THREE.MeshBasicMaterial()
     ufoMaterial.color.setHex( 0xdcfd7c )
+    // ufoMaterial.color.setHex( 0x514918 )
     ufoMaterial.reflectivity = 0.5;
     // ufoMaterial.emissive = new THREE.Color("#dcfd7c").convertSRGBToLinear().multiplyScalar(1)
     // let ufoMaterial = new THREE.MeshPhysicalMaterial({
@@ -270,6 +274,8 @@ scene.add(sunLight);
         sheenRoughness: 0.5,
         sheenColor: new THREE.Color("#183144").convertSRGBToLinear(),
         clearcoat: 1,
+        transparent: true,
+        opacity: 0.1
       }),
     );
 
@@ -290,8 +296,8 @@ scene.add(sunLight);
           depthWrite: false // Often helpful with transparency issues
       })
     )
-    scene.add(cloud)
-
+    // scene.add(cloud)
+// 
     // Animation
     let clock = new Clock();
 
@@ -328,9 +334,9 @@ scene.add(sunLight);
       controls.update();
       renderer.render(scene, camera);
 
-      renderer.autoClear = false;
-      renderer.render(ringsScene, ringsCamera)
-      renderer.autoClear = true;
+      // renderer.autoClear = false;
+      // renderer.render(ringsScene, ringsCamera)
+      // renderer.autoClear = true;
     });
 } catch(err){
   console.log(err)
@@ -342,7 +348,7 @@ function makeUFO(ufoMesh, trailTexture, envMap, scene, lat, lng) {
   // lng: Langitude East => Plus West => Minus
 
   let ufo = ufoMesh.clone();
-  ufo.scale.set(3, 2, 3);
+  ufo.scale.set(2.1, 2, 2.1);
   // ufo.scale.set(1,1,1);
   ufo.position.set(0,0,0);
   ufo.rotation.set(0,0,0);
@@ -351,8 +357,8 @@ function makeUFO(ufoMesh, trailTexture, envMap, scene, lat, lng) {
   ufo.traverse((object) => {
     if(object instanceof THREE.Mesh) {
       object.material.envMap = envMap;
-      object.castShadow = true;
-      object.receiveShadow = true;
+      // object.castShadow = true;
+      // object.receiveShadow = true;
     }
   });
 
@@ -384,7 +390,7 @@ function makeUFO(ufoMesh, trailTexture, envMap, scene, lat, lng) {
     group,
     rot: 0,
     rad: Math.random() * Math.PI * 0.45 + 0.5,
-    yOff: 10.5 + Math.random() * 1,
+    yOff: 10.3 + Math.random() * 0.5,
     // yOff: 10.5,
     // latitudeAxis: new THREE.Vector3(0,0,1), // Latitude Z
     latRot: -lat / 90 * Math.PI/2 + Math.PI/2,
