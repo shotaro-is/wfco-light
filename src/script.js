@@ -226,45 +226,32 @@ scene.add(sunLight);
     })
 
     let ufosData = [
-      makeUFO(ufo, textures.ufoTrailMask, envMap, scene, Math.PI / 2 + 0.05, Math.PI / 10), // South America
-      makeUFO(ufo, textures.ufoTrailMask, envMap, scene, Math.PI / 2 + 0.05, Math.PI / 10 + 0.2), // South America
-      makeUFO(ufo, textures.ufoTrailMask, envMap, scene, Math.PI * 0.7, Math.PI / 10 - 0.1), // South America
-      makeUFO(ufo, textures.ufoTrailMask, envMap, scene, Math.PI / 3 + 0.05, -Math.PI / 5 - 0.1), // North America
-      makeUFO(ufo, textures.ufoTrailMask, envMap, scene, Math.PI / 3, -Math.PI / 6), // North America
-      makeUFO(ufo, textures.ufoTrailMask, envMap, scene, Math.PI / 4 + 0.1, -Math.PI / 10), // North America
-      makeUFO(ufo, textures.ufoTrailMask, envMap, scene, Math.PI / 8 + 0.05, Math.PI / 4 + 0.05), // Iceland
-      makeUFO(ufo, textures.ufoTrailMask, envMap, scene, Math.PI / 4 + 0.1, Math.PI / 3  + 0.1), // Spain 1,
-      makeUFO(ufo, textures.ufoTrailMask, envMap, scene, Math.PI / 4 + 0.03, Math.PI / 3  + 0.2), // Spain 2
-      makeUFO(ufo, textures.ufoTrailMask, envMap, scene, Math.PI / 4 + 0.05, Math.PI / 2 ), // Croatia
-      makeUFO(ufo, textures.ufoTrailMask, envMap, scene, Math.PI / 4 - 0.05, Math.PI / 2 + 0.2 ), // Ukraine
-      makeUFO(ufo, textures.ufoTrailMask, envMap, scene, Math.PI / 4 + 0.05, Math.PI / 2 + 0.15 ), // Turkey1
-      makeUFO(ufo, textures.ufoTrailMask, envMap, scene, Math.PI / 4 + 0.1, Math.PI / 2 + 0.25 ), // Turkey2
-      makeUFO(ufo, textures.ufoTrailMask, envMap, scene, Math.PI / 4 + 0.25, Math.PI / 2 + 0.25 ), // Israel
-      makeUFO(ufo, textures.ufoTrailMask, envMap, scene, Math.PI / 3 + 0.2, Math.PI / 2 + 0.42 ), // Saudi Arabia 1
-      makeUFO(ufo, textures.ufoTrailMask, envMap, scene, Math.PI / 3 + 0.1, Math.PI / 2 + 0.55 ), // Saudi Arabia 2
-      makeUFO(ufo, textures.ufoTrailMask, envMap, scene, Math.PI / 2 - 0.3, Math.PI / 3 ), // Snegal
-      makeUFO(ufo, textures.ufoTrailMask, envMap, scene, Math.PI / 2 - 0.15, Math.PI / 3 + 0.35 ), // Nigeria
-      makeUFO(ufo, textures.ufoTrailMask, envMap, scene, Math.PI * 2 / 3 - 0.1 , Math.PI / 2 + 0.05 ), // South Africa
-      makeUFO(ufo, textures.ufoTrailMask, envMap, scene, Math.PI * 2 / 3 - 0.2 , Math.PI / 2 + 0.15 ), // Botswana
-      makeUFO(ufo, textures.ufoTrailMask, envMap, scene, Math.PI  / 3 , Math.PI *  3 / 4 + 0.2 ), // India 1
-      makeUFO(ufo, textures.ufoTrailMask, envMap, scene, Math.PI  / 3  + 0.1, Math.PI *  3 / 4 + 0.3 ), // India 2
-      makeUFO(ufo, textures.ufoTrailMask, envMap, scene, Math.PI  / 3  + 0.3, Math.PI *  9 / 10 + 0.3 ), // Vietnam
-      makeUFO(ufo, textures.ufoTrailMask, envMap, scene, Math.PI  / 4 + 0.1, Math.PI *  9 / 10 + 0.5 ), // China
-      // makeUFO(ufo, textures.ufoTrailMask, envMap, scene),
-      // makeUFO(ufo, textures.ufoTrailMask, envMap, scene),
-      // makeUFO(ufo, textures.ufoTrailMask, envMap, scene),
-      // makeUFO(ufo, textures.ufoTrailMask, envMap, scene),
-      // makeUFO(ufo, textures.ufoTrailMask, envMap, scene),
-      // makeUFO(ufo, textures.ufoTrailMask, envMap, scene),
-      // makeUFO(ufo, textures.ufoTrailMask, envMap, scene),
-      // makeUFO(ufo, textures.ufoTrailMask, envMap, scene),
-      // makeUFO(ufo, textures.ufoTrailMask, envMap, scene),
-      // makeUFO(ufo, textures.ufoTrailMask, envMap, scene),
-      // makeUFO(ufo, textures.ufoTrailMask, envMap, scene),
-      // makeUFO(ufo, textures.ufoTrailMask, envMap, scene),
-      // makeUFO(ufo, textures.ufoTrailMask, envMap, scene),
-      // makeUFO(ufo, textures.ufoTrailMask, envMap, scene),
-      // makeUFO(ufo, textures.ufoTrailMask, envMap, scene),
+      // North => Plus South => Minus East => Plus West => Minus
+      makeUFO(ufo, textures.ufoTrailMask, envMap, scene, 0.0405, -51.0561), // Brazil 1
+      makeUFO(ufo, textures.ufoTrailMask, envMap, scene, -2.5307, -44.2989), // Brazil 2
+      makeUFO(ufo, textures.ufoTrailMask, envMap, scene, 30.8406, -115.2838), // Baja California
+      makeUFO(ufo, textures.ufoTrailMask, envMap, scene, 31.6904, -106.4245), // North America 1
+      makeUFO(ufo, textures.ufoTrailMask, envMap, scene, 39.1031, -84.512), // North America 2
+      makeUFO(ufo, textures.ufoTrailMask, envMap, scene, 64.961, -21.9408), // North America
+      makeUFO(ufo, textures.ufoTrailMask, envMap, scene, 51.3755, -4.1427), // UK
+      makeUFO(ufo, textures.ufoTrailMask, envMap, scene, 41.6488, -0.8891), // Spain 1,
+      makeUFO(ufo, textures.ufoTrailMask, envMap, scene, 37.3891, -5.9845), // Spain 2
+      makeUFO(ufo, textures.ufoTrailMask, envMap, scene, 41.3275, 19.8187 ), // Albania
+      makeUFO(ufo, textures.ufoTrailMask, envMap, scene, 50.4504, 30.5245 ), // Ukraine
+      makeUFO(ufo, textures.ufoTrailMask, envMap, scene, 41.0082, 28.9784 ), // Turkey1
+      makeUFO(ufo, textures.ufoTrailMask, envMap, scene, 39.9334, 32.8597 ), // Turkey2
+      makeUFO(ufo, textures.ufoTrailMask, envMap, scene, 31.0461, 34.8516 ), // Israel
+      makeUFO(ufo, textures.ufoTrailMask, envMap, scene, 21.5292, 39.1611 ), // Saudi Arabia 1
+      makeUFO(ufo, textures.ufoTrailMask, envMap, scene, 26.0667, 50.5577 ), // Bahrain
+      makeUFO(ufo, textures.ufoTrailMask, envMap, scene, 14.4974, -14.4524 ), // Snegal
+      makeUFO(ufo, textures.ufoTrailMask, envMap, scene, 9.082, 8.6753 ), // Nigeria
+      makeUFO(ufo, textures.ufoTrailMask, envMap, scene, -30.5595, 22.9375 ), // South Africa
+      makeUFO(ufo, textures.ufoTrailMask, envMap, scene, -22.3285, 24.6849), // Botswana
+      makeUFO(ufo, textures.ufoTrailMask, envMap, scene, 28.6139 , 77.2088 ), // India 1
+      makeUFO(ufo, textures.ufoTrailMask, envMap, scene, 21.1458, 79.0882 ), // India 2
+      makeUFO(ufo, textures.ufoTrailMask, envMap, scene, 12.2529, 109.1899), // Vietnam
+      makeUFO(ufo, textures.ufoTrailMask, envMap, scene, 24.8104, 113.5972 ), // Shaoguan China
+      makeUFO(ufo, textures.ufoTrailMask, envMap, scene, 39.9042, 116.4074 ), // Haidian, Beijing, China
 
     ]
 
@@ -331,10 +318,10 @@ scene.add(sunLight);
         ufo.rotation.set(0, 0, 0);
         ufo.updateMatrixWorld();
 
-        ufoData.longRot += delta * 0.03;
-        ufo.rotateOnAxis(new THREE.Vector3(0, 0, 1), ufoData.latiRot); // Latitude Rotation
-        ufo.rotateOnWorldAxis(new THREE.Vector3(0, 1, 0), ufoData.longRot); // Longtitude Rotation
-        ufo.rotateOnAxis(new THREE.Vector3(0, 1, 0), -20*ufoData.longRot); // ufo rotation
+        ufoData.lngRot += delta * 0.03;
+        ufo.rotateOnAxis(new THREE.Vector3(0, 0, 1), ufoData.latRot); // Latitude Rotation
+        ufo.rotateOnWorldAxis(new THREE.Vector3(0, 1, 0), ufoData.lngRot); // Longtitude Rotation
+        ufo.rotateOnAxis(new THREE.Vector3(0, 1, 0), -20*ufoData.lngRot); // ufo rotation
         ufo.translateY(ufoData.yOff);
       });
 
@@ -350,9 +337,13 @@ scene.add(sunLight);
 }
 })();
 
-function makeUFO(ufoMesh, trailTexture, envMap, scene, lati, long) {
+function makeUFO(ufoMesh, trailTexture, envMap, scene, lat, lng) {
+  // lat: Latitude North => Plus South => Minus Lookup "city name coordinates" on google
+  // lng: Langitude East => Plus West => Minus
+
   let ufo = ufoMesh.clone();
   ufo.scale.set(3, 2, 3);
+  // ufo.scale.set(1,1,1);
   ufo.position.set(0,0,0);
   ufo.rotation.set(0,0,0);
   ufo.updateMatrixWorld();
@@ -396,8 +387,8 @@ function makeUFO(ufoMesh, trailTexture, envMap, scene, lati, long) {
     yOff: 10.5 + Math.random() * 1,
     // yOff: 10.5,
     // latitudeAxis: new THREE.Vector3(0,0,1), // Latitude Z
-    latiRot: lati,
-    longRot: long,
+    latRot: -lat / 90 * Math.PI/2 + Math.PI/2,
+    lngRot: Math.PI * lng / 180 + Math.PI / 3 + 0.2 ,
     // rotSpeed : Math.random() + 0.5 
     // randomAxis: new THREE.Vector3 (nr(), nr(), nr()).normalize(),
     // randomAxisRot: Math.random() * Math.PI * 2,
