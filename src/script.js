@@ -14,7 +14,9 @@ import {
   Group,
   EquirectangularReflectionMapping,
   ACESFilmicToneMapping,
-  Raycaster
+  Raycaster,
+  Box3,
+  Box3Helper
 } from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js"
 import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader.js";
@@ -38,6 +40,10 @@ document.body.appendChild(renderer.domElement);
 // Raycaster
 let pointer = new Vector2();
 let raycaster = new Raycaster();
+raycaster.far = 50;
+
+// Bounding Box (Hit Box)
+let ufosData = [];
 
 // Controls
 const controls = new OrbitControls(camera, renderer.domElement);
@@ -118,26 +124,8 @@ controls.enableDamping = true;
 
     // UFO
     let ufo = ( await new GLTFLoader().setDRACOLoader(dLoader).loadAsync('./element-5-draco.glb')).scene.children[0];
-    // let ufo = ( await new GLTFLoader().loadAsync('./element_1.glb')).scene.children[0];
 
-    // let ufoMaterial = new MeshPhysicalMaterial({
-    //   roughness: 1,
-    //   metalness: 1,
-    //   color: new Color("#dcfd7c"),
-    //   envMapIntensity: 1,
-    // });
-
-
-    // ufo.traverse((o) => {
-    //   if (o.isMesh) o.material = new MeshPhysicalMaterial({
-    //     roughness: 1,
-    //     metalness: 1,
-    //     color: new Color("#dcfd7c"),
-    //     envMapIntensity: 1,
-    //   });
-    // })
-
-    let ufosData = [
+    ufosData = [
       // North => Plus South => Minus East => Plus West => Minus
       makeUFO(ufo, scene, 3, 0.0405, -51.0561), // Brazil 1
       makeUFO(ufo, scene, 2, -2.5307, -44.2989), // Brazil 2
@@ -196,6 +184,8 @@ controls.enableDamping = true;
         ufo.rotateOnWorldAxis(new Vector3(0, 1, 0), ufoData.lngRot); // Longtitude Rotation
         ufo.rotateOnAxis(new Vector3(0, 1, 0), -20*ufoData.lngRot); // ufo rotation
         ufo.translateY(ufoData.yOff);
+
+        ufoData.box.setFromObject(ufo);
       });
 
       controls.update();
@@ -241,18 +231,25 @@ function makeUFO(ufoMesh, scene, size, lat, lng) {
     if (!o.material.userData) {
       o.material.userData = {};
     }
-  
-    // Store the color in userData
     o.material.userData.color = o.material.color.clone();
   };
   })
+
 
   let group = new Group();
   group.add(ufo);
   scene.add(group);
 
+  // Bounding Hit Box
+  let box = new Box3().setFromObject(ufo);
+  
+  // Debug Use ot see Hit Box
+  const helper = new Box3Helper( box, 0xffff00 );
+  scene.add(helper)
+
   return {
     group,
+    box,
     rot: 0,
     rad: Math.random() * Math.PI * 0.45 + 0.5,
     yOff: 10.3 + Math.random() * 0.5,
@@ -276,38 +273,50 @@ function resizeWindow() {
 }
 
 function onPointerMove(event) {
+  // console.log(ufosData)
 
 	pointer.x = (event.clientX / window.innerWidth) * 2 - 1;
   pointer.y = -(event.clientY / window.innerHeight) * 2 + 1;
   
   raycaster.setFromCamera(pointer, camera);
-  
-  const intersects = raycaster.intersectObjects(scene.children, true);
-  
-  // reset colors
-  
+
+
+  // Reset Colors
   scene.traverse( function( object ) {
    
     if ( object.isMesh === true &&object.name != "continent" && object.name !="ocean"){
       object.material.color.copy( object.material.userData.color );
     }
   });
+
+  // const intersects = raycaster.intersectObjects(scene.children, true);
+  // for (let i = 0; i < intersects.length; i++) {
+  //   if (intersects[i].distance <= raycaster.far) {
+  //     console.log('Intersection detected within range with UFO at', intersects[i].point);
+  //     intersects[i].object.traverse((object) => {
+  //       if (object.isMesh) {
+  //         object.material.color.set(0xff0000); // Set to red or any other color
+  //       }
+  //     });
+  //     // break; // Optional: break if you only care about the first intersection
+  //   }
+  // }
   
-
-  if (intersects.length > 0) {
-
-    const object =  intersects[0].object;
-    
-    object.traverse( function( obj ) {
-    
-    	if ( obj.isMesh === true && obj.name !="continent" && obj.name != "ocean") {
-      
-      	obj.material.color.set( 0x504921 );
-      
+  for (let ufoData of ufosData) {
+    let intersectionPoint = new Vector3(); // Create a new Vector3 to store the intersection point
+    if (raycaster.ray.intersectBox(ufoData.box, intersectionPoint) !== null) {
+      // Calculate the distance from the camera to the intersection point
+      let distance = intersectionPoint.distanceTo(camera.position);
+      if (distance <= raycaster.far) {
+        console.log('Intersection detected with UFO at', intersectionPoint, 'at distance', distance);
+        // Change color of the UFO
+        ufoData.group.traverse((object) => {
+          if (object.isMesh) {
+            object.material.color.set(0xff0000); // Set to red or any other color
+          }
+        });
       }
-    
-    } );
-
+    }
   }
 
 }
