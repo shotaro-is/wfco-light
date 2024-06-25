@@ -1,4 +1,4 @@
-# Three.js Journey
+# Weird Carbon Flying Objects
 
 ## Setup
 Download [Node.js](https://nodejs.org/en/download/).
