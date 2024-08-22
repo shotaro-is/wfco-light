@@ -1,6 +1,6 @@
 # Weird Carbon Flying Objects
 
-// Demo
+## Demo
 <https://wfco.netlify.app/>
 
 ## Setup
