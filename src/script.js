@@ -243,9 +243,9 @@ function makeUFO(ufoMesh, scene, size, lat, lng) {
   // Bounding Hit Box
   let box = new Box3().setFromObject(ufo);
   
-  // Debug Use ot see Hit Box
-  const helper = new Box3Helper( box, 0xffff00 );
-  scene.add(helper)
+  // Debug yse to see Hit Box
+  // const helper = new Box3Helper( box, 0xffff00 );
+  // scene.add(helper)
 
   return {
     group,
