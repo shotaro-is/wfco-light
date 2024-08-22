@@ -1,5 +1,8 @@
 # Weird Carbon Flying Objects
 
+// Demo
+<https://wfco.netlify.app/>
+
 ## Setup
 Download [Node.js](https://nodejs.org/en/download/).
 Run this followed commands:
