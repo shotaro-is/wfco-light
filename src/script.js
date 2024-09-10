@@ -60,24 +60,29 @@ controls.enableDamping = true;
   try {
     // HDRI
     const hdrLoader = new HDRJPGLoader(renderer);
-    let envmapTexture = await hdrLoader.loadAsync('./cannon_1k.jpg');
+    const textureLoader = new TextureLoader();
+    const gltfLoader = new GLTFLoader().setDRACOLoader(new DRACOLoader().setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.5.7/').setDecoderConfig({ type: 'js' }));
+
+    // Load assets in parallel
+    const [envmapTexture, bumpTexture, continentGLTF, ufoGLTF] = await Promise.all([
+      hdrLoader.loadAsync('./cannon_1k.jpg'),
+      textureLoader.loadAsync('./earthbump-min.jpg'),
+      gltfLoader.loadAsync('./continent-draco.glb'),
+      gltfLoader.loadAsync('./flower_pedal_1_draco.glb')
+    ]);
+
+    // Set environment map
     scene.environment = envmapTexture.renderTarget.texture;
     scene.environment.mapping = EquirectangularReflectionMapping;
     scene.environmentIntensity = 1;
 
-    // Texture
-    let textures = {
-      bump: await new TextureLoader().loadAsync('./earthbump-min.jpg'),
-    };
-
-    // Draco Loader
-    const dLoader = new DRACOLoader().setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.5.7/').setDecoderConfig({ type: 'js' });
+    // Set bump texture
+    bumpTexture.flipY = false;
 
     // Continent
-    let continent = (await new GLTFLoader().setDRACOLoader(dLoader).loadAsync('./continent-draco.glb')).scene.children[0];
-    textures.bump.flipY = false;
+    let continent = continentGLTF.scene.children[0];
     let continentMaterial = new MeshPhysicalMaterial({
-      bumpMap: textures.bump,
+      bumpMap: bumpTexture,
       bumpScale: 10,
       roughness: 0.6,
       envMapIntensity: 1.3,
@@ -111,7 +116,6 @@ controls.enableDamping = true;
     scene.add(ocean);
 
     // Load UFO model
-    let ufoGLTF = await new GLTFLoader().setDRACOLoader(dLoader).loadAsync('./flower_pedal_1_draco.glb');
     console.log(ufoGLTF); // Log the structure of the loaded GLTF model
 
     // Traverse the scene to find the Mesh object
@@ -256,6 +260,3 @@ function resizeWindow() {
   camera.updateProjectionMatrix();
   renderer.setSize(window.innerWidth, window.innerHeight);
 }
-
-
-// ... existing code ...
